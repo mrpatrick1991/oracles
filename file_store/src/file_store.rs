@@ -198,7 +198,7 @@ impl FileStore {
     where
         K: Into<String>,
     {
-        get_byte_stream(self.client.clone(), self.bucket.clone(), format!("{}{}", PREFIX, key))
+        get_byte_stream(self.client.clone(), self.bucket.clone(), format!("{}{}", PREFIX, key)).await
     }
 
     pub async fn get<K>(&self, key: K) -> Result<BytesMutStream>
