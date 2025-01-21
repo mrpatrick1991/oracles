@@ -12,8 +12,6 @@ use http::Uri;
 use std::path::Path;
 use std::str::FromStr;
 
-let prefix = "foundation-iot-verified-rewards/";
-
 #[derive(Debug, Clone)]
 pub struct FileStore {
     pub(crate) bucket: String,
