@@ -112,7 +112,7 @@ impl FileStore {
             .list_objects_v2()
             .bucket(&self.bucket)
             .prefix(file_type.to_string())
-            .request_payer("requester")
+            .request_payer("requester".into())
             .set_start_after(after.map(|dt| FileInfo::from((file_type, dt)).into()));
 
         futures::stream::unfold(
@@ -169,7 +169,7 @@ impl FileStore {
                 .key(file.file_name().map(|name| name.to_string_lossy()).unwrap())
                 .body(byte_stream)
                 .content_type("application/octet-stream")
-                .request_payer("requester")
+                .request_payer("requester".into())
                 .send()
                 .map_ok(|_| ())
                 .map_err(Error::s3_error)
@@ -184,7 +184,7 @@ impl FileStore {
                 .delete_object()
                 .bucket(&self.bucket)
                 .key(key)
-                .request_payer("requester")
+                .request_payer("requester".into())
                 .send()
                 .map_ok(|_| ())
                 .map_err(Error::s3_error)
@@ -271,7 +271,7 @@ where
         .get_object()
         .bucket(bucket)
         .key(key)
-        .request_payer("requester")
+        .request_payer("requester".into())
         .send()
         .map_ok(|output| output.body)
         .map_err(Error::s3_error)
