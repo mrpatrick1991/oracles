@@ -196,7 +196,7 @@ impl FileStore {
 
     pub async fn get_raw<K>(&self, key: K) -> Result<ByteStream>
     where
-        K: Into<String>,
+        K: Into<String> + std::fmt::Display,
     {
         get_byte_stream(self.client.clone(), self.bucket.clone(), format!("{}{}", PREFIX, key)).await
     }
