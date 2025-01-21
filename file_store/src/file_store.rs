@@ -12,6 +12,8 @@ use http::Uri;
 use std::path::Path;
 use std::str::FromStr;
 
+const PREFIX: &str = "foundation-iot-verified-rewards/";
+
 #[derive(Debug, Clone)]
 pub struct FileStore {
     pub(crate) bucket: String,
@@ -111,9 +113,9 @@ impl FileStore {
             .client
             .list_objects_v2()
             .bucket(&self.bucket)
-            .prefix(file_type.to_string())
+            .prefix(format!("{}{}", PREFIX, file_type))
             .request_payer("requester".into())
-            .set_start_after(after.map(|dt| FileInfo::from((file_type, dt)).into()));
+            .set_start_after(after.map(|dt| FileInfo::from((format!("{}{}", PREFIX, file_type), dt)).into()))
 
         futures::stream::unfold(
             (request, true, None),
@@ -166,7 +168,7 @@ impl FileStore {
             self.client
                 .put_object()
                 .bucket(&self.bucket)
-                .key(file.file_name().map(|name| name.to_string_lossy()).unwrap())
+                .key(format!("{}{}", PREFIX, file.file_name().map(|name| name.to_string_lossy()).unwrap()))
                 .body(byte_stream)
                 .content_type("application/octet-stream")
                 .request_payer("requester".into())
@@ -183,7 +185,7 @@ impl FileStore {
             self.client
                 .delete_object()
                 .bucket(&self.bucket)
-                .key(key)
+                .key(format!("{}{}", PREFIX, key))
                 .request_payer("requester".into())
                 .send()
                 .map_ok(|_| ())
@@ -196,7 +198,7 @@ impl FileStore {
     where
         K: Into<String>,
     {
-        get_byte_stream(self.client.clone(), self.bucket.clone(), key).await
+        get_byte_stream(self.client.clone(), self.bucket.clone(), format!("{}{}", PREFIX, key))
     }
 
     pub async fn get<K>(&self, key: K) -> Result<BytesMutStream>
