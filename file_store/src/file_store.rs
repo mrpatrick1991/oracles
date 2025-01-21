@@ -12,7 +12,7 @@ use http::Uri;
 use std::path::Path;
 use std::str::FromStr;
 
-const prefix: &str = "foundation-iot-verified-rewards/";
+const PREFIX: &str = "foundation-iot-verified-rewards/";
 
 #[derive(Debug, Clone)]
 pub struct FileStore {
@@ -113,7 +113,7 @@ impl FileStore {
             .client
             .list_objects_v2()
             .bucket(&self.bucket)
-            .prefix(format!("{}{}", prefix, file_type))
+            .prefix(format!("{}{}", PREFIX, file_type))
             .request_payer("requester".into())
             .set_start_after(after.map(|dt| FileInfo::from((file_type, dt)).into()));
 
