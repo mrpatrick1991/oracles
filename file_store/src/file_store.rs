@@ -12,7 +12,7 @@ use http::Uri;
 use std::path::Path;
 use std::str::FromStr;
 
-const &str prefix = "foundation-iot-verified-rewards/";
+const prefix: &str = "foundation-iot-verified-rewards/";
 
 #[derive(Debug, Clone)]
 pub struct FileStore {
