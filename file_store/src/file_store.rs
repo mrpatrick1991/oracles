@@ -12,6 +12,8 @@ use http::Uri;
 use std::path::Path;
 use std::str::FromStr;
 
+let prefix = "foundation-iot-verified-rewards/";
+
 #[derive(Debug, Clone)]
 pub struct FileStore {
     pub(crate) bucket: String,
@@ -111,7 +113,7 @@ impl FileStore {
             .client
             .list_objects_v2()
             .bucket(&self.bucket)
-            .prefix(file_type.to_string())
+            .prefix(format!("{}{}", prefix, file_type))
             .request_payer("requester".into())
             .set_start_after(after.map(|dt| FileInfo::from((file_type, dt)).into()));
 
